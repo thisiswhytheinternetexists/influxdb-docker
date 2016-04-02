@@ -1,10 +1,4 @@
-FROM debian:jessie
-
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    ca-certificates \
-    gnupg \
-    wget
+FROM buildpack-deps:jessie-curl
 
 RUN wget -q https://repos.influxdata.com/influxdb.key && \
     gpg --import influxdb.key && \
