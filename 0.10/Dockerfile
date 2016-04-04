@@ -13,12 +13,12 @@ RUN wget -q https://s3.amazonaws.com/influxdb/influxdb_$INFLUXDB_VERSION-1_amd64
 
 EXPOSE 8083 8086
 
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["influxd"]
-
 ENV INFLUXDB_META_DIR=/var/lib/influxdb/meta \
     INFLUXDB_DATA_DIR=/var/lib/influxdb/data \
     INFLUXDB_DATA_WAL_DIR=/var/lib/influxdb/wal \
     INFLUXDB_HINTED_HANDOFF_DIR=/var/lib/influxdb/hh
 VOLUME /var/lib/influxdb
+
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["influxd"]
