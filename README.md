@@ -12,12 +12,28 @@ real-time analytics.
 
 ### Running the container
 
-    docker run -p 8083:8083 -p 8086:8086 influxdb
+The InfluxDB image exposes a shared volume under
+`/var/lib/influxdb`, so you can mount a host directory to that point
+to access persisted container data. A typical invocation of the
+container might be:
+
+    docker run -p 8083:8083 -p 8086:8086 \
+           -v $PWD:/var/lib/influxdb \
+           influxdb
+
+Modify `$PWD` to the directory where you want to store data associated
+with the InfluxDB container.
+
+You can also have Docker control the volume mountpoint by using a named volume.
+
+    docker run -p 8083:8083 -p 8086:8086 \
+           -v influxdb:/var/lib/influxdb \
+           influxdb
 
 ### Exposed Ports
 
-The following ports are important and will be automatically exposed when
-using `docker run -P`.
+The following ports are important and will be automatically exposed
+when using `docker run -P`.
 
 -	8083 Admin interface port
 -	8086 HTTP API PORT
@@ -35,16 +51,24 @@ Find more about API Endpoints & Ports [here](https://docs.influxdata.com/influxd
 ### Configuration
 
 InfluxDB can be either configured from a config file or using
-environment variables. To mount a configuration file and use it with the
-server, you can use this command:
+environment variables. To mount a configuration file and use it with
+the server, you can use this command:
 
     # Generate the default configuration file
-    docker run --rm -v $PWD:/etc/influxdb influxdb bash -c 'influxd config > /etc/influxdb/influxdb.conf'
-    # Modify the configuration file and start the daemon
-    docker run -P -v $PWD:/etc/influxdb influxdb -config /etc/influxdb/influxdb.conf
+    docker run --rm \
+           -v $PWD:/etc/influxdb \
+           influxdb bash -c 'influxd config > /etc/influxdb/influxdb.conf'
 
-Modify `$PWD` to the directory where you want to store the configuration
-file.
+    # Modify the default configuration, which will now be available
+    # under $PWD
+
+    # Start the InfluxDB container
+    docker run -p 8083:8083 -p 8086:8086 \
+           -v $PWD:/etc/influxdb:ro \
+           influxdb -config /etc/influxdb/influxdb.conf
+
+Modify `$PWD` to the directory where you want to store the
+configuration file.
 
 For environment variables, the format is `INFLUXDB_$SECTION_$NAME`. All
 dashes (`-`) are replaced with underscores (`_`). If the variable isn't
