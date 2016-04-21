@@ -4,7 +4,7 @@ RUN gpg \
     --keyserver hkp://ha.pool.sks-keyservers.net \
     --recv-keys 05CE15085FC09D18E99EFB22684A14CF2582E0C5
 
-ENV INFLUXDB_VERSION 0.12.1
+ENV INFLUXDB_VERSION 0.12.2
 RUN wget -q https://s3.amazonaws.com/influxdb/influxdb_$INFLUXDB_VERSION-1_amd64.deb.asc && \
     wget -q https://s3.amazonaws.com/influxdb/influxdb_$INFLUXDB_VERSION-1_amd64.deb && \
     gpg --batch --verify influxdb_$INFLUXDB_VERSION-1_amd64.deb.asc influxdb_$INFLUXDB_VERSION-1_amd64.deb && \
