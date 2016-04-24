@@ -18,4 +18,4 @@ VOLUME /var/lib/influxdb
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["influxd", "-config", "/etc/influxdb/influxdb.conf"]
+CMD ["influxd"]
