@@ -8,7 +8,22 @@ fi
 # TODO remove this for 0.13
 if [ "$1" = 'influxd' ]; then
     shift
-    set -- influxd -config /etc/influxdb/influxdb.conf "$@"
+    case $1 in
+      config)
+        shift
+        set -- influxd config -config /etc/influxdb/influxdb.conf "$@"
+        ;;
+      run)
+        shift
+        set -- influxd run -config /etc/influxdb/influxdb.conf "$@"
+        ;;
+      -*)
+        set -- influxd -config /etc/influxdb/influxdb.conf "$@"
+        ;;
+      *)
+        set -- influxd "$@"
+        ;;
+    esac
 fi
 
 exec "$@"
